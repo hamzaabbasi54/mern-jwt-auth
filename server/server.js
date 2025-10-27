@@ -3,7 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import connectDb from "./config/mongodb.js";
-
+import authRouter from './routes/authRoutes.js';
 // Connect to MongoDB
 connectDb();
 
@@ -16,14 +16,14 @@ app.use(cors({
     credentials: true
 }));
 
+// api enddpoints
 
 app.get('/',(req,res)=>{
     res.send('Hello from Express server!');
 });
-
-
-
-
+console.log("before api auth");
+app.use('/api/auth', authRouter);
+console.log("after api auth");
 
 
 

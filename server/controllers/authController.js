@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import userModel from "../models/userModel.js";
+import User from "../models/userModel.js";
 
 export const register = async(req,res)=>{
 
@@ -9,19 +9,27 @@ export const register = async(req,res)=>{
         return res.status(400).json({message:"fields are missing"});
     }
     try{
-        const existingUser = await userModel.findOne({email})
+        const existingUser = await User.findOne({email})
         if(existingUser){
             return res.status(400).json({message:"User already exists"});
         }
         const hashedPassword= await bcrypt.hash(password,10);
-        const user = new userModel({
+        const user = new User({
             name,
             email,
             password:hashedPassword
         });
         await user.save();
-
-        const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"1d"});
+        //creation of tokken
+        const token = jwt.sign(
+            {id:user._id},
+            process.env.JWT_SECRET,
+            {expiresIn:"1d"}
+        );
+        //tokken being send to the user's browser by the server to be stored in the user's device in form of cookie
+        //ist written tokken is the name of the cookie
+        //2nd written tokken is what we are sending
+        // {} in these brackets we are defining the rules , use gemini or chatgpt to understand these rules
         res.cookie('token',token,{
             httpOnly:true,
             secure:process.env.NODE_ENV==="production",
@@ -42,7 +50,7 @@ export const login = async (req,res)=> {
         return res.status(400).json({message: "fields are missing"});
     }
     try {
-        const user = await userModel.findOne({email});
+        const user = await User.findOne({email});
         if (!user) {
             return res.status(400).json({message: "Invalid credentials"});
         }
