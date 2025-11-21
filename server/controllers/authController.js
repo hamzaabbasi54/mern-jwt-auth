@@ -119,9 +119,10 @@ export const logout = async (req, res) => {
 // SEND VERIFY OTP
 export const sendVerifyOtp = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const userId = req.userId;   // get userId from middleware
 
         const user = await User.findById(userId);
+
 
         if (!user) {
             return res.json({ success: false, message: "user not found" });
@@ -157,7 +158,10 @@ export const sendVerifyOtp = async (req, res) => {
 
 // VERIFY EMAIL
 export const verifyEmail = async (req, res) => {
-    const { userId, otp } = req.body;
+
+    const userId = req.userId;   // only trust middleware userId
+    const { otp } = req.body;
+
 
     if (!userId || !otp) {
         return res.status(400).json({ message: "fields are missing" });
@@ -188,7 +192,9 @@ export const verifyEmail = async (req, res) => {
 
     } catch (err) {
         return res.json({ success: false, message: err.message });
-    }}
+    }
+}
+
 export const isAuthenticated= async (req,res)=>{
         try{
             return res.status(200).json({success:"true",message: "Authenticated successfully"});
