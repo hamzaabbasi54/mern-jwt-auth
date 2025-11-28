@@ -50,10 +50,16 @@ export const register = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
-        return res.status(201).json({ message: "User registered successfully" });
+        return res.status(201).json({
+            success: true,  // ADD THIS
+            message: "User registered successfully"
+        });
 
     } catch (err) {
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({
+            success: false,  // ADD THIS
+            message: "Internal server error"
+        });
     }
 };
 
@@ -92,10 +98,16 @@ export const login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        return res.status(200).json({ message: "Login successful" });
+        return res.status(200).json({
+            success: true,  // ADD THIS
+            message: "Login successful"
+        });
 
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({
+            success: false,  // ADD THIS
+            message: "Internal server error"
+        });
     }
 };
 
