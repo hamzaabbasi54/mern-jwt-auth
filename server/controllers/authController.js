@@ -121,11 +121,12 @@ export const logout = async (req, res) => {
             sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
         });
 
-        return res.status(200).json({ message: "Logout successful" });
+        return res.status(200).json({ success: true, message: "Logout successful" });
     } catch (err) {
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
+
 
 
 // SEND VERIFY OTP
@@ -207,14 +208,14 @@ export const verifyEmail = async (req, res) => {
     }
 }
 
-export const isAuthenticated= async (req,res)=>{
-        try{
-            return res.status(200).json({success:"true",message: "Authenticated successfully"});
-        }
-    catch(error){
-            res.json({success:false, message:error.message});
+export const isAuthenticated = async (req, res) => {
+    try {
+        return res.status(200).json({ success: true, message: "Authenticated successfully" });
+    } catch (error) {
+        return res.status(401).json({ success: false, message: error.message });
     }
-    }
+};
+
 
     //SEND PASSWORD RESET OTP
 export const sendResetOtp = async (req, res) => {
