@@ -45,6 +45,25 @@ export const AppContextProvider = (props)=>{
         }
     }
 
+    const sendVerifyOtp = async () => {
+        try {
+            const { data } = await axios.post(backendUrl + '/api/auth/send-verify-otp');
+            if (data.success) {
+                toast.success('OTP sent to your email');
+                return true;
+            } else {
+                toast.error(data.message);
+                return false;
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to send OTP');
+            return false;
+        }
+    }
+
+
+
+
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -57,17 +76,19 @@ export const AppContextProvider = (props)=>{
                     setIsLoggedin(false);
                     setUserData(null);
                 }
-            } catch (error) {
+            }
+            catch (error) {
                 setIsLoggedin(false);
                 setUserData(null);
             }
         };
         checkAuth();
     }, []);
+
         const value={
             backendUrl,
             isLoggedin,setIsLoggedin,
-            userData,setUserData,getUserData,logoutUser
+            userData,setUserData,getUserData,logoutUser,sendVerifyOtp
         }
     return (
         <AppContent.Provider value={value}>
