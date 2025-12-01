@@ -245,7 +245,11 @@ export const sendResetOtp = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
-        return res.status(201).json({ message: "verification otp sent to email" });
+        return res.status(201).json({
+            success: true,
+            message: "verification otp sent to email"
+        });
+
     }
     catch(error){
         return res.json({ success:false, message:error.message});
